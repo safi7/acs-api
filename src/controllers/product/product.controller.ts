@@ -33,7 +33,7 @@ export class ProductController {
       };
     } catch (err) {
       console.error('err', err);
-      throw new HttpException('Could not create a record', HttpStatus.BAD_GATEWAY);
+      throw new HttpException('could_not_create_a_record', HttpStatus.BAD_GATEWAY);
     }
   }
 
@@ -73,7 +73,7 @@ export class ProductController {
       };
     } catch (err) {
       console.error('err', err);
-      throw new HttpException('Could not create a record', HttpStatus.BAD_GATEWAY);
+      throw new HttpException('could_not_create_a_record', HttpStatus.BAD_GATEWAY);
     }
   }
 }

@@ -5,9 +5,13 @@ import * as fastify from 'fastify';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { join } from 'path';
 import fastifyStatic from '@fastify/static';
+import { GlobalHttpExceptionFilter } from './common/filters/global-http-exceptions.filter';
+import { NotFoundFilter } from './common/filters/not-found.filter';
+import { Logger, NestInterceptor } from '@nestjs/common';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { ErrorsInterceptor } from './common/interceptors/errors.interceptor';
 
 async function bootstrap() {
-
   const serverOptions: fastify.FastifyServerOptions = {
     logger: false,
     bodyLimit: 10588576
@@ -25,9 +29,16 @@ async function bootstrap() {
   });
 
   await nestApp.register(fastifyStatic, {
-    root: join(__dirname, '..', 'media'), 
-    prefix: '/media/' 
+    root: join(__dirname, '..', 'media'),
+    prefix: '/media/'
   });
+
+  nestApp.useGlobalFilters(...[new GlobalHttpExceptionFilter(), new NotFoundFilter()]);
+
+  const logger = new Logger();
+  const globalInterceptors: NestInterceptor[] = [new TransformInterceptor(), new ErrorsInterceptor(logger)];
+
+  nestApp.useGlobalInterceptors(...globalInterceptors);
 
   await nestApp.listen(mainConfig.api_port);
 }

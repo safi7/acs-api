@@ -13,5 +13,9 @@ export default {
   postgres_port: process.env.POSTGRES_PORT,
   postgres_database: process.env.POSTGRES_DATABASE,
   postgres_username: process.env.POSTGRES_USERNAME,
-  postgres_password: process.env.POSTGRES_PASSWORD
+  postgres_password: process.env.POSTGRES_PASSWORD,
+
+  sendgrid_api_key: process.env.SENDGRID_API_KEY,
+  from_email: process.env.FROM_EMAIL,
+  target_email: process.env.TARGET_EMAIL
 };
