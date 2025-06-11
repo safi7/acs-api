@@ -11,6 +11,7 @@ export class ProductEntity extends BaseEntity {
 
   @ManyToOne(() => ProductCategoryEntity, (category) => category.products)
   @JoinColumn({ name: 'categorySlug', referencedColumnName: 'slug' })
+  @Column()
   categorySlug: string;
 
   @Column()

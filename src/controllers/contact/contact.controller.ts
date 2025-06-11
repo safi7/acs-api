@@ -9,18 +9,14 @@ export class ContactController {
 
   @Post()
   async sendFeedback(@Body() params: FeedbackDto): Promise<{ status: string }> {
-    try {
-      if (!isValidEmail(params.email)) {
-        throw new HttpException('invalid_email', HttpStatus.BAD_REQUEST);
-      }
+    if (!isValidEmail(params.email)) {
+      throw new HttpException('invalid_email', HttpStatus.BAD_REQUEST);
+    }
 
-      try {
-        await this.contactS.sendFeedback(params);
-      } catch (err) {
-        console.log('err', err);
-      }
+    try {
+      await this.contactS.sendFeedback(params);
     } catch (err) {
-      console.error('err', err);
+      console.log('err', err);
       throw new HttpException('could_not_send_a_feedback', HttpStatus.BAD_REQUEST);
     }
 
