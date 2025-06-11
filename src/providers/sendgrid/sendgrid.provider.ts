@@ -12,11 +12,11 @@ export class SendgridProvider {
 
   async sendEmail(input: sendEmailInterface) {
    const message = {
-      from: `${mainConfig.from_email}`,
-      to: mainConfig.target_email,
-      subject: `Customer Feedback ${input.name}`,
-      text: `Name: ${input.name}\n Email: ${input.email}, Message: ${input.message}`
-    };
+     from: `${mainConfig.from_email}`,
+     to: mainConfig.target_email,
+     subject: `Customer Feedback ${input.name}`,
+     text: `Name: ${input.name}\nEmail: ${input.email},\nMessage: ${input.message}`
+   };
    return await sgMail.send(message);
   }
 }
