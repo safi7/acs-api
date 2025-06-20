@@ -40,6 +40,8 @@ async function bootstrap() {
 
   nestApp.useGlobalInterceptors(...globalInterceptors);
 
-  await nestApp.listen(mainConfig.api_port);
+  const port = process.env.PORT || mainConfig.api_port || 3000;
+  console.log(`✅ Starting server on port ${port}`);
+  await nestApp.listen(port, '0.0.0.0');
 }
 bootstrap();
