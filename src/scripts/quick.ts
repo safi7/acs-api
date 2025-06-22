@@ -613,7 +613,7 @@ const products = [
 
 
 async function run(){
-  //  await createCategories();
+  await createCategories();
   await createProducts();
 
 }

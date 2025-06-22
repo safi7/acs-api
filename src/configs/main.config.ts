@@ -17,5 +17,8 @@ export default {
 
   sendgrid_api_key: process.env.SENDGRID_API_KEY,
   from_email: process.env.FROM_EMAIL,
-  target_email: process.env.TARGET_EMAIL
+  target_email: process.env.TARGET_EMAIL,
+
+  telegram_api_url: process.env.TELEGRAM_API_URL,
+  telegram_channel_id: process.env.TELEGRAM_CHANNEL_ID
 };

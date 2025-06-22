@@ -14,7 +14,8 @@ export class ContactController {
     }
 
     try {
-      await this.contactS.sendFeedback(params);
+      // await this.contactS.sendFeedback(params);
+      await this.contactS.sendTelegramMessage(params);
     } catch (err) {
       console.log('err', err);
       throw new HttpException('could_not_send_a_feedback', HttpStatus.BAD_REQUEST);

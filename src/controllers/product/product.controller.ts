@@ -40,7 +40,6 @@ export class ProductController {
   @Get('/all')
   async getProducts(): Promise<productResponseInterface[]> {
     const products = await this.productS.findAll();
-    console.log('products', products);
     return products.map((product) => ({
       id: product.id,
       name: product.name,
@@ -57,7 +56,6 @@ export class ProductController {
 
   @Post('/create')
   async createProduct(@Body() params: ProductCreateDto): Promise<productResponseInterface> {
-  console.log('params', params);
     try {
       const product = await this.productS.create(params);
       return {
