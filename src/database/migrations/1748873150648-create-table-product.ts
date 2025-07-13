@@ -19,34 +19,69 @@ export class CreateTableProducts1748678136926 implements MigrationInterface {
             isNullable: false
           },
           {
-            name: 'shortDescription',
+            name: 'slug',
             type: 'varchar',
             isNullable: false
           },
           {
-            name: 'fullDescription',
+            name: 'type',
             type: 'varchar',
-            isNullable: false
+            isNullable: true
           },
           {
-            name: 'manufacturer',
-            type: 'varchar',
-            isNullable: false
+            name: 'composition',
+            type: 'text',
+            isNullable: true
           },
           {
-            name: 'certifications',
+            name: 'coating',
             type: 'varchar',
-            isNullable: false
+            isNullable: true
           },
           {
-            name: 'specifications',
+            name: 'colour',
             type: 'varchar',
-            isNullable: false
+            isNullable: true
           },
           {
-            name: 'imageUrl',
+            name: 'tissueReaction',
             type: 'varchar',
-            isNullable: false
+            isNullable: true
+          },
+          {
+            name: 'absorption',
+            type: 'text',
+            isNullable: true
+          },
+          {
+            name: 'presentation',
+            type: 'text',
+            isNullable: true
+          },
+          {
+            name: 'needleTypeUrl',
+            type: 'varchar',
+            isNullable: true
+          },
+          {
+            name: 'completeSheet',
+            type: 'varchar',
+            isNullable: true
+          },
+          {
+            name: 'indications',
+            type: 'text',
+            isNullable: true
+          },
+          {
+            name: 'benefits',
+            type: 'text',
+            isNullable: true
+          },
+          {
+            name: 'orderNumber',
+            type: 'text',
+            isNullable: true
           },
           {
             name: 'categorySlug',

@@ -1,14 +1,21 @@
-export interface productResponseInterface {
+export interface ProductResponseInterface {
   id: number;
   name: string;
-  shortDescription: string;
-  fullDescription: string;
-  imageUrl: string;
+  slug: string;
   categorySlug: string;
-  manufacturer: string;
-  certifications: string[];
-  specifications: Record<string, string>;
+  imageUrl: string;
+  type?: string;
+  composition?: string;
+  coating?: string;
+  colour?: string;
+  tissueReaction?: string;
+  absorption?: string;
+  presentation?: string;
+  needleTypeUrl?: string;
+  completeSheet?: string;
+  indications?: string;
+  benefits?: string;
+  orderNumber?: string;
   createdAt: Date;
+  updatedAt: Date;
 }
-
-

@@ -9,28 +9,49 @@ export class ProductEntity extends BaseEntity {
   @Column()
   name: string;
 
+  @Column()
+  slug: string;
+
   @ManyToOne(() => ProductCategoryEntity, (category) => category.products)
   @JoinColumn({ name: 'categorySlug', referencedColumnName: 'slug' })
   @Column()
   categorySlug: string;
 
-  @Column()
-  shortDescription: string;
+  @Column({ nullable: true })
+  type: string;
 
-  @Column()
-  fullDescription: string;
+  @Column({ type: 'text', nullable: true })
+  composition: string;
 
-  @Column()
-  manufacturer: string;
+  @Column({ nullable: true })
+  coating: string;
 
-  @Column()
-  certifications: string;
+  @Column({ nullable: true })
+  colour: string;
 
-  @Column()
-  specifications: string;
+  @Column({ nullable: true })
+  tissueReaction: string;
 
-  @Column()
-  imageUrl: string;
+  @Column({ type: 'text', nullable: true })
+  absorption: string;
+
+  @Column({ type: 'text', nullable: true })
+  presentation: string;
+
+  @Column({ nullable: true })
+  needleTypeUrl: string;
+
+  @Column({ nullable: true })
+  completeSheet: string;
+
+  @Column({ type: 'text', nullable: true })
+  indications: string;
+
+  @Column({ type: 'text', nullable: true })
+  benefits: string;
+
+  @Column({ type: 'text', nullable: true })
+  orderNumber: string;
 
   @CreateDateColumn()
   createdAt: Date;

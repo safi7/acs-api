@@ -14,6 +14,10 @@ export class ProductService {
     return this.repo.find();
   }
 
+  findOne(slug: string) {
+    return this.repo.findOne({ where: { slug } });
+  }
+
   create(productCategory: Partial<ProductEntity>) {
     const newCategory = this.repo.create(productCategory);
     return this.repo.save(newCategory);
