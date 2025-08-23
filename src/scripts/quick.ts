@@ -3,40 +3,40 @@ import mainConfig from '../configs/main.config';
 
 const categories = [
   {
-    slug: 'medical-devices-disposables',
-    title: 'Medical Devices & Disposables',
-    description: 'High-quality disposable medical supplies and advanced medical devices.',
-    imageUrl: 'media/products/acs-product-medical.webp'
+    slug: 'medical-devices',
+    title: 'Medical Devices',
+    description: 'High-quality and advanced medical devices, covering all categories.',
+    imageUrl: 'media/products/acs-product-medicals.webp'
   },
   {
-    slug: 'surgical-instruments',
-    title: 'Surgical Instruments',
-    description: 'Precision surgical tools and instruments for medical professionals.',
-    imageUrl: 'media/products/acs-product-surgical.webp'
+    slug: 'raw-materials',
+    title: 'Raw Materials',
+    description: 'All types of raw materials including Glycerine, SLES, Silica Gel, and many others.',
+    imageUrl: 'media/products/acs-product-raw-materials.webp'
   },
   {
-    slug: 'wound-care',
-    title: 'Wound Care',
-    description: 'Advanced wound care products and dressing solutions.',
-    imageUrl: 'media/products/acs-product-wound.webp'
+    slug: 'heavy-machinery',
+    title: 'Heavy Machinery',
+    description: 'All types of heavy machinery including olive oil processing machines, cranes, dump trucks, and much more.',
+    imageUrl: 'media/products/acs-product-heavy-machinery.webp'
   },
   {
-    slug: 'dental',
-    title: 'Dental',
-    description: 'Comprehensive dental equipment and supplies.',
-    imageUrl: 'media/products/acs-product-dental.webp'
+    slug: 'electronics',
+    title: 'Electronics',
+    description: 'A wide range of electronics including mobile phone accessories, smartphones, laptops, tablets, and more.',
+    imageUrl: 'media/products/acs-product-electronics.webp'
   },
   {
-    slug: 'cardiology',
-    title: 'Cardiology',
-    description: 'Specialized cardiac care equipment and supplies.',
-    imageUrl: 'media/products/acs-product-cardiology.webp'
+    slug: 'home-appliances',
+    title: 'Home Appliances',
+    description: 'Home appliances, décor, and related products for everyday living and home improvement.',
+    imageUrl: 'media/products/acs-product-home-appliances.webp'
   },
   {
-    slug: 'orthopaedics',
-    title: 'Orthopaedics',
-    description: 'Complete range of orthopaedic supplies and equipment.',
-    imageUrl: 'media/products/acs-product-orthopaedics.webp'
+    slug: 'construction-materials',
+    title: 'Construction Materials',
+    description: 'A complete range of construction materials including steel, cement, wallpapers, and other essential supplies.',
+    imageUrl: 'media/products/acs-product-construction-materials.webp'
   }
 ];
 
@@ -44,9 +44,10 @@ const products = [
   {
     name: 'Polypropylen',
     slug: 'Polypropylen',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     needleTypeUrl: 'https://www.sutures.be/wp-content/uploads/2018/01/Needle-type.pdf',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/Polypropylene.pdf',
+    keyWords: 'Wound Care',
     type: 'Monofilament',
     composition: 'Polypropylene, a polymer of propylene',
     coating: 'None',
@@ -58,9 +59,10 @@ const products = [
   {
     name: 'Silk',
     slug: 'Silk',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     needleTypeUrl: 'https://www.sutures.be/wp-content/uploads/2018/01/Needle-type.pdf',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/2018/10/SILK.pdf',
+    keyWords: 'Wound Care',
     type: 'Braided multifilament',
     composition: 'Braided fibres from the cocoon of the silkworm',
     coating: 'Silicone',
@@ -73,9 +75,10 @@ const products = [
   {
     name: 'Daclon Nylon',
     slug: 'Daclon Nylon',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     needleTypeUrl: 'https://www.sutures.be/wp-content/uploads/2018/01/Needle-type.pdf',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/2018/01/Needle-type.pdf',
+    keyWords: 'Wound Care',
     type: 'Monofilament',
     composition: 'Extrusion of polyamide 6.0 or 6.6',
     coating: 'None',
@@ -88,7 +91,7 @@ const products = [
   {
     name: 'Skin Stapler & Remover',
     slug: 'Skin Stapler Remover',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/SKIN-STAPLER-REMOVER.pdf',
     indications: 'SMI Skin Stapler can be used for a variety of skin closures',
     benefits: 'ergonomic and user friendly design / clear view of operating site /easy to check remaining staples',
@@ -97,9 +100,10 @@ const products = [
   {
     name: 'Surgicryl® 910',
     slug: 'Surgicryl 910',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     needleTypeUrl: 'https://www.sutures.be/wp-content/uploads/2018/01/Needle-type.pdf',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/2018/10/Surgicryl_910.pdf',
+    keyWords: 'Wound Care',
     type: 'Braided and coated multifilament',
     composition: 'Polyglactine 910, a copolymer made of 90% glycolide and 10%L-lactide',
     coating: 'Poly-glycolide-co-L-lactide and calcium stearate (<1%)',
@@ -112,9 +116,10 @@ const products = [
   {
     name: 'Catgut Plain',
     slug: 'Catgut Plain',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     needleTypeUrl: 'https://www.sutures.be/wp-content/uploads/2018/10/Catgut_PLAIN.pdf',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/2018/01/Needle-type.pdf',
+    keyWords: 'Wound Care',
     type: 'Twisted multifilament with a monofilament appearance',
     composition: 'Strands of purified collagen taken from the serosal layer of selected bovines. Origin from BSE-free classified countries.',
     coating: 'None',
@@ -127,9 +132,10 @@ const products = [
   {
     name: 'Catgut Chrome',
     slug: 'Catgut Chrome',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     needleTypeUrl: 'https://www.sutures.be/wp-content/uploads/2018/01/Needle-type.pdf',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/2018/10/Catgut_CHROM.pdf',
+    keyWords: 'Wound Care',
     type: 'Twisted multifilament with a monofilament appearance',
     composition:
       'Strands of purified collagen taken from the serosal layer of selected bovines, tanned with chrome salts. Origin from BSE-free classified countries.',
@@ -143,7 +149,7 @@ const products = [
   {
     name: 'Bone Wax',
     slug: 'Bone Wax',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/MM-BW-1.0-EN-BONE-WAX.pdf',
     composition: 'refined white beeswax, paraffin and isopropyl palmitate',
     indications: 'used in the control of bleeding from bone surfaces by acting as a mechanical barrier',
@@ -153,9 +159,10 @@ const products = [
   {
     name: 'Surgicryl® PGA',
     slug: 'Surgicryl PGA',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     needleTypeUrl: 'https://www.sutures.be/wp-content/uploads/2018/10/Surgicryl_PGA.pdf',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/2018/01/Needle-type.pdf',
+    keyWords: 'Wound Care',
     type: 'Braided and coated multifilament',
     composition: 'Polyglycolic acid',
     coating: 'Polycaprolactone and calcium stearate (1%)',
@@ -168,7 +175,7 @@ const products = [
   {
     name: 'Surgical blades',
     slug: 'Surgical blades',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/MM-ZB-SURGICAL-BLADES-SCALPEL-HANDLES.pdf',
     composition: 'Carbon Steel',
     presentation: 'Individual sterile foil packs/\nBlades without handle: 100 / box\nBlades with plastic handle 10 / box',
@@ -177,7 +184,7 @@ const products = [
   {
     name: 'SMI Spon',
     slug: 'SMI Spon',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/MM-ZHG-SMI-SPON.pdf',
     composition: 'Highly purified first grade gelatine material',
     indications:
@@ -188,7 +195,7 @@ const products = [
   {
     name: 'Polypropylene mesh',
     slug: 'Polypropylene mesh',
-    categorySlug: 'wound-care',
+    categorySlug: 'medical-devices',
     completeSheet: 'https://www.sutures.be/wp-content/uploads/MM-ZM-V1.0-EN-MESH.pdf',
     indications: 'Reinforcement of the abdominal wall\n• Hernia\n• Eventration\nvia celioscopy or laparotomy',
     composition: 'Monofilament polypropylene knitted into an elastic, durable mesh',

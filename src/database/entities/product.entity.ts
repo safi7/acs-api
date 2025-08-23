@@ -20,6 +20,9 @@ export class ProductEntity extends BaseEntity {
   @Column({ nullable: true })
   type: string;
 
+  @Column({ nullable: true })
+  keyWords: string;
+
   @Column({ type: 'text', nullable: true })
   composition: string;
 

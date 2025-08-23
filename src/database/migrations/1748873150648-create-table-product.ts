@@ -29,6 +29,11 @@ export class CreateTableProducts1748678136926 implements MigrationInterface {
             isNullable: true
           },
           {
+            name: 'keyWords',
+            type: 'varchar',
+            isNullable: true
+          },
+          {
             name: 'composition',
             type: 'text',
             isNullable: true

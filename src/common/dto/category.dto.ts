@@ -41,6 +41,11 @@ export class ProductCreateDto {
   @IsOptional()
   @IsString()
   @Transform(HtmlSanitizer)
+  keyWords?: string;
+
+  @IsOptional()
+  @IsString()
+  @Transform(HtmlSanitizer)
   composition?: string;
 
   @IsOptional()

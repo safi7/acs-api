@@ -5,6 +5,7 @@ export interface ProductResponseInterface {
   categorySlug: string;
   imageUrl: string;
   type?: string;
+  keyWords?: string;
   composition?: string;
   coating?: string;
   colour?: string;
