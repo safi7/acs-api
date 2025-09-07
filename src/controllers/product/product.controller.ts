@@ -16,8 +16,10 @@ export class ProductController {
   @Get('category/all')
   async getCategories(): Promise<categoryResponseInterface[]> {
     const categories = await this.productCategoryS.findAll();
+    const hasProducts = ['medical-devices'];
     return categories.map((v) => ({
       ...v,
+      hasProducts: hasProducts.includes(v.slug),
       imageUrl: `${mainConfig.api_url}/${v.imageUrl}`
     }));
   }
@@ -26,11 +28,13 @@ export class ProductController {
   async createCategories(@Body() params: CategoryCreateDto): Promise<categoryResponseInterface> {
     try {
       const category = await this.productCategoryS.create(params);
+    const hasProducts = ['medical-devices'];
       return {
         id: category.id,
         title: category.title,
         description: category.description,
         slug: category.slug,
+        hasProducts: hasProducts.includes(category.slug),
         imageUrl: category.imageUrl,
         createdAt: category.createdAt
       };

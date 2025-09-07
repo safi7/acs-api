@@ -3,6 +3,7 @@ export interface categoryResponseInterface {
   title: string;
   description: string;
   slug: string;
+  hasProducts: boolean;
   imageUrl: string;
   createdAt: Date;
 }
