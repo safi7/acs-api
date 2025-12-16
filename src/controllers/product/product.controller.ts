@@ -46,13 +46,14 @@ export class ProductController {
 
   @Get('/all')
   async getProducts(): Promise<ProductResponseInterface[]> {
+    const version = 1;
     const products = await this.productS.findAll();
     return products.map((product) => ({
       id: product.id,
       name: product.name,
       slug: product.slug,
       categorySlug: product.categorySlug,
-      imageUrl: `${mainConfig.api_url}/media/products/${product.slug}.webp`,
+      imageUrl: `${mainConfig.api_url}/media/products/${product.slug}.webp?v=${version}`,
       type: product.type,
       keyWords: product.keyWords,
       composition: product.composition,
