@@ -15,7 +15,7 @@ export class ProductController {
 
   @Get('category/all')
   async getCategories(): Promise<categoryResponseInterface[]> {
-    const version = 1;
+    const version = 2;
     const categories = await this.productCategoryS.findAll();
     const hasProducts = ['medical-devices'];
     return categories.map((v) => ({
@@ -47,7 +47,7 @@ export class ProductController {
 
   @Get('/all')
   async getProducts(): Promise<ProductResponseInterface[]> {
-    const version = 1;
+    const version = 2;
     const products = await this.productS.findAll();
     return products.map((product) => ({
       id: product.id,
