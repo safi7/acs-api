@@ -15,12 +15,13 @@ export class ProductController {
 
   @Get('category/all')
   async getCategories(): Promise<categoryResponseInterface[]> {
+    const version = 1;
     const categories = await this.productCategoryS.findAll();
     const hasProducts = ['medical-devices'];
     return categories.map((v) => ({
       ...v,
       hasProducts: hasProducts.includes(v.slug),
-      imageUrl: `${mainConfig.api_url}/${v.imageUrl}`
+      imageUrl: `${mainConfig.api_url}/${v.imageUrl}?v=${version}`
     }));
   }
 
