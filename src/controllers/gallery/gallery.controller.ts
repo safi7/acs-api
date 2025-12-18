@@ -11,7 +11,6 @@ export class GalleryController {
   constructor(private galleryS: GalleryService) {}
 
   @Get('/all')
-  @UseGuards(AuthGuard)
   async getAll(): Promise<GalleryResponseInterface[]> {
     const version = 1;
     const items = await this.galleryS.findAll();
@@ -45,6 +44,7 @@ export class GalleryController {
   }
 
   @Post('/create')
+  @UseGuards(AuthGuard)
   async create(@Body() params: GalleryCreateDto): Promise<GalleryResponseInterface> {
     try {
       const item = await this.galleryS.create(params);
@@ -64,6 +64,7 @@ export class GalleryController {
   }
 
   @Put('/:id')
+  @UseGuards(AuthGuard)
   async update(@Param('id') id: string, @Body() params: GalleryUpdateDto): Promise<GalleryResponseInterface> {
     try {
       await this.galleryS.update(+id, params);

@@ -136,7 +136,6 @@ let GalleryController = class GalleryController {
 exports.GalleryController = GalleryController;
 __decorate([
     (0, common_1.Get)('/all'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -150,6 +149,7 @@ __decorate([
 ], GalleryController.prototype, "getOne", null);
 __decorate([
     (0, common_1.Post)('/create'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [gallery_dto_1.GalleryCreateDto]),
@@ -157,6 +157,7 @@ __decorate([
 ], GalleryController.prototype, "create", null);
 __decorate([
     (0, common_1.Put)('/:id'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
