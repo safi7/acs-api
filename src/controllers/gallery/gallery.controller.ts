@@ -91,7 +91,6 @@ export class GalleryController {
   @UseInterceptors(FileUploadInterceptor)
   async upload(@Request() req: any): Promise<GalleryResponseInterface> {
     try {
-      console.log('req', req);
       const fileData = (req as any).fileData;
       if (!fileData) {
         throw new HttpException('File data not found', HttpStatus.BAD_REQUEST);
@@ -100,16 +99,12 @@ export class GalleryController {
       // Get form fields from multipart data
       const description = (req.body as any)?.description;
       const title = (req.body as any)?.title;
-      console.log('description', description);
-      console.log('title', title);
       const item = await this.galleryS.createWithFile(
         fileData.buffer,
         fileData.filename,
         description,
         title
       );
-
-      console.log('item', item);
 
       return {
         id: item.id,

@@ -29,7 +29,6 @@ export class FileUploadInterceptor implements NestInterceptor {
 
     // Process all parts
     for await (const part of parts) {
-      console.log('part', part);
       if (part.type === 'file') {
         const file = part;
         const fileBuffer = await file.toBuffer();
@@ -52,7 +51,6 @@ export class FileUploadInterceptor implements NestInterceptor {
         try {
           // Ensure we have a proper Buffer instance
           const buffer = Buffer.isBuffer(fileBuffer) ? fileBuffer : Buffer.from(fileBuffer);
-          console.log('buffer', buffer);
           // Verify buffer has content
           if (!buffer || buffer.length === 0) {
             throw new HttpException('Empty file buffer', HttpStatus.BAD_REQUEST);
@@ -60,14 +58,12 @@ export class FileUploadInterceptor implements NestInterceptor {
           
           // Verify WEBP header (RIFF...WEBP)
           const header = buffer.toString('ascii', 0, 12);
-          console.log('header', header);
           if (!header.startsWith('RIFF') || !header.includes('WEBP')) {
             throw new HttpException('Invalid WEBP file format - file header does not match WEBP signature', HttpStatus.BAD_REQUEST);
           }
           
           // Use sharp to read metadata - it should auto-detect WEBP format
           const metadata = await sharp(buffer).metadata();
-          console.log('metadata', metadata);
           if (!metadata.width || !metadata.height) {
             throw new HttpException('Invalid image file - could not read dimensions', HttpStatus.BAD_REQUEST);
           }
