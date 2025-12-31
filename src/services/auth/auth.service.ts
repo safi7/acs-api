@@ -25,12 +25,14 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Generate a simple token
-    const token = this.generateToken();
-
-    // Store token in database
-    user.token = token;
-    await this.crmUserRepo.save(user);
+    // Check if user already has a valid token
+    let token = user.token;
+    
+    // Only generate a new token if one doesn't exist
+    if (!token) {
+      token = this.generateToken();
+      await this.crmUserRepo.update(user.id, { token });
+    }
 
     return {
       token,

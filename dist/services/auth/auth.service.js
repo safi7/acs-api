@@ -33,9 +33,11 @@ let AuthService = class AuthService {
         if (!isPasswordValid) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
-        const token = this.generateToken();
-        user.token = token;
-        await this.crmUserRepo.save(user);
+        let token = user.token;
+        if (!token) {
+            token = this.generateToken();
+            await this.crmUserRepo.update(user.id, { token });
+        }
         return {
             token,
             username: user.username
