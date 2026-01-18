@@ -25,8 +25,6 @@ export class AddSpecificationsToProducts1748873150650 implements MigrationInterf
       const specifications: any = {};
       
       // Map existing fields to specifications (only if they exist)
-      if (product.type !== undefined) specifications.type = product.type;
-      if (product.keyWords !== undefined) specifications.key_words = product.keyWords;
       if (product.composition !== undefined) specifications.composition = product.composition;
       if (product.coating !== undefined) specifications.coating = product.coating;
       if (product.colour !== undefined) specifications.colour = product.colour;

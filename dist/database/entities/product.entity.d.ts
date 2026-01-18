@@ -4,7 +4,6 @@ export declare class ProductEntity extends BaseEntity {
     name: string;
     slug: string;
     shortDescription: string;
-    fullDescription: string;
     manufacturer: string;
     certifications: string;
     imageUrl: string;

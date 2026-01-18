@@ -12,7 +12,7 @@ exports.config = {
     password: `${main_config_1.default.postgres_password}`,
     database: `${main_config_1.default.postgres_database}`,
     entities: [entities_1.ProductCategoryEntity, entities_1.ProductEntity, entities_1.GalleryEntity, entities_1.CrmUserEntity],
-    migrations: ['dist/migrations/*{.ts,.js}'],
+    migrations: ['src/database/migrations}'],
     autoLoadEntities: true,
     synchronize: false
 };

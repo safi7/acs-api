@@ -37,11 +37,6 @@ export class ProductCreateDto {
   @IsOptional()
   @IsString()
   @Transform(HtmlSanitizer)
-  fullDescription?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
   manufacturer?: string;
 
   @IsOptional()

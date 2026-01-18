@@ -44,7 +44,6 @@ class ProductCreateDto {
     name;
     slug;
     shortDescription;
-    fullDescription;
     manufacturer;
     certifications;
     imageUrl;
@@ -68,12 +67,6 @@ __decorate([
     (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
     __metadata("design:type", String)
 ], ProductCreateDto.prototype, "shortDescription", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "fullDescription", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

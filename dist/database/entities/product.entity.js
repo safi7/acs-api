@@ -17,7 +17,6 @@ let ProductEntity = class ProductEntity extends typeorm_1.BaseEntity {
     name;
     slug;
     shortDescription;
-    fullDescription;
     manufacturer;
     certifications;
     imageUrl;
@@ -43,10 +42,6 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], ProductEntity.prototype, "shortDescription", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "fullDescription", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)

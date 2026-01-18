@@ -10,7 +10,7 @@ export const config = {
   password: `${mainConfig.postgres_password}`,
   database: `${mainConfig.postgres_database}`,
   entities: [ProductCategoryEntity, ProductEntity, GalleryEntity, CrmUserEntity],
-  migrations: ['dist/migrations/*{.ts,.js}'],
+  migrations: ['src/database/migrations}'],
   // migrations: ['src/database/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
   synchronize: false

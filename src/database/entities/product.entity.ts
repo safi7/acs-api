@@ -15,9 +15,6 @@ export class ProductEntity extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   shortDescription: string;
 
-  @Column({ type: 'text', nullable: true })
-  fullDescription: string;
-
   @Column({ nullable: true })
   manufacturer: string;
 

@@ -3,7 +3,6 @@ export interface ProductResponseInterface {
   name: string;
   slug: string;
   shortDescription?: string;
-  fullDescription?: string;
   manufacturer?: string;
   certifications?: string;
   categorySlug: string;
