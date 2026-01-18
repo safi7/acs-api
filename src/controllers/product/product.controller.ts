@@ -142,7 +142,6 @@ export class ProductController {
 
     const processed = { ...specifications };
 
-    console.log('processed', processed);
     // Create URL for needle_type_url if it exists
     if (processed.needle_type_url && typeof processed.needle_type_url === 'string') {
         processed.needle_type_url = `${mainConfig.api_url}/media/products/needle-type/Needle-type.pdf`;

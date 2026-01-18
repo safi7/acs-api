@@ -43,20 +43,13 @@ __decorate([
 class ProductCreateDto {
     name;
     slug;
+    shortDescription;
+    fullDescription;
+    manufacturer;
+    certifications;
+    imageUrl;
     categorySlug;
-    type;
-    keyWords;
-    composition;
-    coating;
-    colour;
-    tissueReaction;
-    absorption;
-    presentation;
-    needleTypeUrl;
-    completeSheet;
-    indications;
-    benefits;
-    orderNumber;
+    specifications;
 }
 exports.ProductCreateDto = ProductCreateDto;
 __decorate([
@@ -70,86 +63,42 @@ __decorate([
     __metadata("design:type", String)
 ], ProductCreateDto.prototype, "slug", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
+    __metadata("design:type", String)
+], ProductCreateDto.prototype, "shortDescription", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
+    __metadata("design:type", String)
+], ProductCreateDto.prototype, "fullDescription", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
+    __metadata("design:type", String)
+], ProductCreateDto.prototype, "manufacturer", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
+    __metadata("design:type", String)
+], ProductCreateDto.prototype, "certifications", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
+    __metadata("design:type", String)
+], ProductCreateDto.prototype, "imageUrl", void 0);
+__decorate([
     (0, class_validator_1.IsString)(),
     (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
     __metadata("design:type", String)
 ], ProductCreateDto.prototype, "categorySlug", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "type", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "keyWords", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "composition", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "coating", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "colour", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "tissueReaction", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "absorption", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "presentation", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "needleTypeUrl", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "completeSheet", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "indications", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "benefits", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_transformer_1.Transform)(html_sanitizer_validator_1.HtmlSanitizer),
-    __metadata("design:type", String)
-], ProductCreateDto.prototype, "orderNumber", void 0);
+    __metadata("design:type", Object)
+], ProductCreateDto.prototype, "specifications", void 0);
 //# sourceMappingURL=category.dto.js.map

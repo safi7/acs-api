@@ -18,12 +18,15 @@ const category_dto_1 = require("../../common/dto/category.dto");
 const main_config_1 = require("../../configs/main.config");
 const category_service_1 = require("../../services/product/category.service");
 const product_service_1 = require("../../services/product/product.service");
+const product_specification_service_1 = require("../../services/product/product-specification.service");
 let ProductController = class ProductController {
     productCategoryS;
     productS;
-    constructor(productCategoryS, productS) {
+    productSpecificationS;
+    constructor(productCategoryS, productS, productSpecificationS) {
         this.productCategoryS = productCategoryS;
         this.productS = productS;
+        this.productSpecificationS = productSpecificationS;
     }
     async getCategories() {
         const version = 2;
@@ -61,21 +64,13 @@ let ProductController = class ProductController {
             id: product.id,
             name: product.name,
             slug: product.slug,
+            shortDescription: product.shortDescription,
+            fullDescription: product.fullDescription,
+            manufacturer: product.manufacturer,
+            certifications: product.certifications,
             categorySlug: product.categorySlug,
             imageUrl: `${main_config_1.default.api_url}/media/products/${product.slug}.webp?v=${version}`,
-            type: product.type,
-            keyWords: product.keyWords,
-            composition: product.composition,
-            coating: product.coating,
-            colour: product.colour,
-            tissueReaction: product.tissueReaction,
-            absorption: product.absorption,
-            presentation: product.presentation,
-            needleTypeUrl: product.needleTypeUrl ? `${main_config_1.default.api_url}/media/products/needle-type/Needle-type.pdf` : product.needleTypeUrl,
-            completeSheet: product.completeSheet ? `${main_config_1.default.api_url}/media/products/complete-sheet/${product.slug}.pdf` : product.completeSheet,
-            indications: product.indications,
-            benefits: product.benefits,
-            orderNumber: product.orderNumber,
+            specifications: this.processSpecifications(product.specifications || {}, product.slug),
             createdAt: product.createdAt,
             updatedAt: product.updatedAt
         }));
@@ -89,47 +84,32 @@ let ProductController = class ProductController {
             id: product.id,
             name: product.name,
             slug: product.slug,
+            shortDescription: product.shortDescription,
+            fullDescription: product.fullDescription,
+            manufacturer: product.manufacturer,
+            certifications: product.certifications,
             categorySlug: product.categorySlug,
             imageUrl: `${main_config_1.default.api_url}/media/products/${product.slug}.webp`,
-            type: product.type,
-            keyWords: product.keyWords,
-            composition: product.composition,
-            coating: product.coating,
-            colour: product.colour,
-            tissueReaction: product.tissueReaction,
-            absorption: product.absorption,
-            presentation: product.presentation,
-            needleTypeUrl: product.needleTypeUrl ? `${main_config_1.default.api_url}/media/products/needle-type/Needle-type.pdf` : product.needleTypeUrl,
-            completeSheet: product.completeSheet ? `${main_config_1.default.api_url}/media/products/complete-sheet/${product.slug}.pdf` : product.completeSheet,
-            indications: product.indications,
-            benefits: product.benefits,
-            orderNumber: product.orderNumber,
+            specifications: this.processSpecifications(product.specifications || {}, product.slug),
             createdAt: product.createdAt,
             updatedAt: product.updatedAt
         };
     }
     async createProduct(params) {
         try {
-            const product = await this.productS.create(params);
+            const { imageUrl, ...productData } = params;
+            const product = await this.productS.create(productData);
             return {
                 id: product.id,
                 name: product.name,
                 slug: product.slug,
-                keyWords: product.keyWords,
+                shortDescription: product.shortDescription,
+                fullDescription: product.fullDescription,
+                manufacturer: product.manufacturer,
+                certifications: product.certifications,
                 categorySlug: product.categorySlug,
-                imageUrl: `${main_config_1.default.api_url}/media/products/${product.name}.webp`,
-                type: product.type,
-                composition: product.composition,
-                coating: product.coating,
-                colour: product.colour,
-                tissueReaction: product.tissueReaction,
-                absorption: product.absorption,
-                presentation: product.presentation,
-                needleTypeUrl: product.needleTypeUrl,
-                completeSheet: product.completeSheet,
-                indications: product.indications,
-                benefits: product.benefits,
-                orderNumber: product.orderNumber,
+                imageUrl: `${main_config_1.default.api_url}/media/products/${product.slug}.webp`,
+                specifications: this.processSpecifications(product.specifications || {}, product.slug),
                 createdAt: product.createdAt,
                 updatedAt: product.updatedAt
             };
@@ -138,6 +118,31 @@ let ProductController = class ProductController {
             console.error('err', err);
             throw new common_1.HttpException('could_not_create_a_record', common_1.HttpStatus.BAD_GATEWAY);
         }
+    }
+    async getProductSpecifications() {
+        return this.productSpecificationS.findAll();
+    }
+    async createProductSpecification(params) {
+        try {
+            return await this.productSpecificationS.create(params);
+        }
+        catch (err) {
+            console.error('err', err);
+            throw new common_1.HttpException(err.message || 'could_not_create_specification', common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
+    processSpecifications(specifications, productSlug) {
+        if (!specifications || typeof specifications !== 'object') {
+            return specifications;
+        }
+        const processed = { ...specifications };
+        if (processed.needle_type_url && typeof processed.needle_type_url === 'string') {
+            processed.needle_type_url = `${main_config_1.default.api_url}/media/products/needle-type/Needle-type.pdf`;
+        }
+        if (processed.complete_sheet && typeof processed.complete_sheet === 'string') {
+            processed.complete_sheet = `${main_config_1.default.api_url}/media/products/complete-sheet/${productSlug}.pdf`;
+        }
+        return processed;
     }
 };
 exports.ProductController = ProductController;
@@ -174,9 +179,23 @@ __decorate([
     __metadata("design:paramtypes", [category_dto_1.ProductCreateDto]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "createProduct", null);
+__decorate([
+    (0, common_1.Get)('/specifications/all'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "getProductSpecifications", null);
+__decorate([
+    (0, common_1.Post)('/specifications/create'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "createProductSpecification", null);
 exports.ProductController = ProductController = __decorate([
     (0, common_1.Controller)('product'),
     __metadata("design:paramtypes", [category_service_1.ProductCategoryService,
-        product_service_1.ProductService])
+        product_service_1.ProductService,
+        product_specification_service_1.ProductSpecificationService])
 ], ProductController);
 //# sourceMappingURL=product.controller.js.map

@@ -3,20 +3,13 @@ export declare class ProductEntity extends BaseEntity {
     id: number;
     name: string;
     slug: string;
+    shortDescription: string;
+    fullDescription: string;
+    manufacturer: string;
+    certifications: string;
+    imageUrl: string;
     categorySlug: string;
-    type: string;
-    keyWords: string;
-    composition: string;
-    coating: string;
-    colour: string;
-    tissueReaction: string;
-    absorption: string;
-    presentation: string;
-    needleTypeUrl: string;
-    completeSheet: string;
-    indications: string;
-    benefits: string;
-    orderNumber: string;
+    specifications: Record<string, any>;
     createdAt: Date;
     updatedAt: Date;
 }

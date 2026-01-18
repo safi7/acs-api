@@ -16,20 +16,13 @@ let ProductEntity = class ProductEntity extends typeorm_1.BaseEntity {
     id;
     name;
     slug;
+    shortDescription;
+    fullDescription;
+    manufacturer;
+    certifications;
+    imageUrl;
     categorySlug;
-    type;
-    keyWords;
-    composition;
-    coating;
-    colour;
-    tissueReaction;
-    absorption;
-    presentation;
-    needleTypeUrl;
-    completeSheet;
-    indications;
-    benefits;
-    orderNumber;
+    specifications;
     createdAt;
     updatedAt;
 };
@@ -47,63 +40,35 @@ __decorate([
     __metadata("design:type", String)
 ], ProductEntity.prototype, "slug", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], ProductEntity.prototype, "shortDescription", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], ProductEntity.prototype, "fullDescription", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], ProductEntity.prototype, "manufacturer", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], ProductEntity.prototype, "certifications", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], ProductEntity.prototype, "imageUrl", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => product_category_entity_1.ProductCategoryEntity, (category) => category.products),
     (0, typeorm_1.JoinColumn)({ name: 'categorySlug', referencedColumnName: 'slug' }),
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], ProductEntity.prototype, "categorySlug", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "type", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "keyWords", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "composition", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "coating", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "colour", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "tissueReaction", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "absorption", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "presentation", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "needleTypeUrl", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "completeSheet", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "indications", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "benefits", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
-], ProductEntity.prototype, "orderNumber", void 0);
+    (0, typeorm_1.Column)({ type: 'json', nullable: true }),
+    __metadata("design:type", Object)
+], ProductEntity.prototype, "specifications", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
