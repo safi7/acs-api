@@ -12,49 +12,28 @@ export class ProductEntity extends BaseEntity {
   @Column()
   slug: string;
 
+  @Column({ type: 'text', nullable: true })
+  shortDescription: string;
+
+  @Column({ type: 'text', nullable: true })
+  fullDescription: string;
+
+  @Column({ nullable: true })
+  manufacturer: string;
+
+  @Column({ nullable: true })
+  certifications: string;
+
+  @Column({ nullable: true })
+  imageUrl: string;
+
   @ManyToOne(() => ProductCategoryEntity, (category) => category.products)
   @JoinColumn({ name: 'categorySlug', referencedColumnName: 'slug' })
   @Column()
   categorySlug: string;
 
-  @Column({ nullable: true })
-  type: string;
-
-  @Column({ nullable: true })
-  keyWords: string;
-
-  @Column({ type: 'text', nullable: true })
-  composition: string;
-
-  @Column({ nullable: true })
-  coating: string;
-
-  @Column({ nullable: true })
-  colour: string;
-
-  @Column({ nullable: true })
-  tissueReaction: string;
-
-  @Column({ type: 'text', nullable: true })
-  absorption: string;
-
-  @Column({ type: 'text', nullable: true })
-  presentation: string;
-
-  @Column({ nullable: true })
-  needleTypeUrl: string;
-
-  @Column({ nullable: true })
-  completeSheet: string;
-
-  @Column({ type: 'text', nullable: true })
-  indications: string;
-
-  @Column({ type: 'text', nullable: true })
-  benefits: string;
-
-  @Column({ type: 'text', nullable: true })
-  orderNumber: string;
+  @Column({ type: 'json', nullable: true })
+  specifications: Record<string, any>;
 
   @CreateDateColumn()
   createdAt: Date;

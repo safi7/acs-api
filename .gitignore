@@ -1,5 +1,6 @@
 # prod
 /node_modules
+/dist
 *.pem
 .npmrc
 

@@ -29,72 +29,35 @@ export class ProductCreateDto {
   @Transform(HtmlSanitizer)
   slug: string;
 
+  @IsOptional()
+  @IsString()
+  @Transform(HtmlSanitizer)
+  shortDescription?: string;
+
+  @IsOptional()
+  @IsString()
+  @Transform(HtmlSanitizer)
+  fullDescription?: string;
+
+  @IsOptional()
+  @IsString()
+  @Transform(HtmlSanitizer)
+  manufacturer?: string;
+
+  @IsOptional()
+  @IsString()
+  @Transform(HtmlSanitizer)
+  certifications?: string;
+
+  @IsOptional()
+  @IsString()
+  @Transform(HtmlSanitizer)
+  imageUrl?: string;
+
   @IsString()
   @Transform(HtmlSanitizer)
   categorySlug: string;
 
   @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  type?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  keyWords?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  composition?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  coating?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  colour?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  tissueReaction?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  absorption?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  presentation?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  needleTypeUrl?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  completeSheet?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  indications?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  benefits?: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(HtmlSanitizer)
-  orderNumber?: string;
+  specifications?: Record<string, any>;
 }

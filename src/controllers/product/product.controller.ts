@@ -1,16 +1,18 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { CategoryCreateDto, ProductCreateDto } from 'src/common/dto/category.dto';
 import { categoryResponseInterface } from 'src/common/interfaces/category.interface';
-import { ProductResponseInterface } from 'src/common/interfaces/product.interface';
+import { ProductResponseInterface, ProductSpecificationInterface } from 'src/common/interfaces/product.interface';
 import mainConfig from 'src/configs/main.config';
 import { ProductCategoryService } from 'src/services/product/category.service';
 import { ProductService } from 'src/services/product/product.service';
+import { ProductSpecificationService } from 'src/services/product/product-specification.service';
 
 @Controller('product')
 export class ProductController {
   constructor(
     private productCategoryS: ProductCategoryService,
-    private productS: ProductService
+    private productS: ProductService,
+    private productSpecificationS: ProductSpecificationService
   ) {}
 
   @Get('category/all')
@@ -53,21 +55,13 @@ export class ProductController {
       id: product.id,
       name: product.name,
       slug: product.slug,
+      shortDescription: product.shortDescription,
+      fullDescription: product.fullDescription,
+      manufacturer: product.manufacturer,
+      certifications: product.certifications,
       categorySlug: product.categorySlug,
       imageUrl: `${mainConfig.api_url}/media/products/${product.slug}.webp?v=${version}`,
-      type: product.type,
-      keyWords: product.keyWords,
-      composition: product.composition,
-      coating: product.coating,
-      colour: product.colour,
-      tissueReaction: product.tissueReaction,
-      absorption: product.absorption,
-      presentation: product.presentation,
-      needleTypeUrl: product.needleTypeUrl ? `${mainConfig.api_url}/media/products/needle-type/Needle-type.pdf` : product.needleTypeUrl,
-      completeSheet: product.completeSheet ? `${mainConfig.api_url}/media/products/complete-sheet/${product.slug}.pdf` : product.completeSheet,
-      indications: product.indications,
-      benefits: product.benefits,
-      orderNumber: product.orderNumber,
+      specifications: this.processSpecifications(product.specifications || {}, product.slug),
       createdAt: product.createdAt,
       updatedAt: product.updatedAt
     }));
@@ -84,21 +78,13 @@ export class ProductController {
       id: product.id,
       name: product.name,
       slug: product.slug,
+      shortDescription: product.shortDescription,
+      fullDescription: product.fullDescription,
+      manufacturer: product.manufacturer,
+      certifications: product.certifications,
       categorySlug: product.categorySlug,
       imageUrl: `${mainConfig.api_url}/media/products/${product.slug}.webp`,
-      type: product.type,
-      keyWords: product.keyWords,
-      composition: product.composition,
-      coating: product.coating,
-      colour: product.colour,
-      tissueReaction: product.tissueReaction,
-      absorption: product.absorption,
-      presentation: product.presentation,
-      needleTypeUrl: product.needleTypeUrl ? `${mainConfig.api_url}/media/products/needle-type/Needle-type.pdf` : product.needleTypeUrl,
-      completeSheet: product.completeSheet ? `${mainConfig.api_url}/media/products/complete-sheet/${product.slug}.pdf` : product.completeSheet,
-      indications: product.indications,
-      benefits: product.benefits,
-      orderNumber: product.orderNumber,
+      specifications: this.processSpecifications(product.specifications || {}, product.slug),
       createdAt: product.createdAt,
       updatedAt: product.updatedAt
     };
@@ -107,26 +93,20 @@ export class ProductController {
   @Post('/create')
   async createProduct(@Body() params: ProductCreateDto): Promise<ProductResponseInterface> {
     try {
-      const product = await this.productS.create(params);
+      // Don't store imageUrl in database, generate it dynamically
+      const { imageUrl, ...productData } = params;
+      const product = await this.productS.create(productData);
       return {
         id: product.id,
         name: product.name,
         slug: product.slug,
-        keyWords: product.keyWords,
+        shortDescription: product.shortDescription,
+        fullDescription: product.fullDescription,
+        manufacturer: product.manufacturer,
+        certifications: product.certifications,
         categorySlug: product.categorySlug,
-        imageUrl: `${mainConfig.api_url}/media/products/${product.name}.webp`,
-        type: product.type,
-        composition: product.composition,
-        coating: product.coating,
-        colour: product.colour,
-        tissueReaction: product.tissueReaction,
-        absorption: product.absorption,
-        presentation: product.presentation,
-        needleTypeUrl: product.needleTypeUrl,
-        completeSheet: product.completeSheet,
-        indications: product.indications,
-        benefits: product.benefits,
-        orderNumber: product.orderNumber,
+        imageUrl: `${mainConfig.api_url}/media/products/${product.slug}.webp`,
+        specifications: this.processSpecifications(product.specifications || {}, product.slug),
         createdAt: product.createdAt,
         updatedAt: product.updatedAt
       };
@@ -134,5 +114,45 @@ export class ProductController {
       console.error('err', err);
       throw new HttpException('could_not_create_a_record', HttpStatus.BAD_GATEWAY);
     }
+  }
+
+  @Get('/specifications/all')
+  async getProductSpecifications(): Promise<ProductSpecificationInterface[]> {
+    return this.productSpecificationS.findAll();
+  }
+
+  @Post('/specifications/create')
+  async createProductSpecification(@Body() params: Partial<ProductSpecificationInterface>): Promise<ProductSpecificationInterface> {
+    try {
+      return await this.productSpecificationS.create(params);
+    } catch (err) {
+      console.error('err', err);
+      throw new HttpException(err.message || 'could_not_create_specification', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  /**
+   * Process product specifications to create proper URLs for needle_type_url and complete_sheet
+   * These fields are stored as filenames/paths and need to be converted to full URLs
+   */
+  private processSpecifications(specifications: any, productSlug: string): any {
+    if (!specifications || typeof specifications !== 'object') {
+      return specifications;
+    }
+
+    const processed = { ...specifications };
+
+    console.log('processed', processed);
+    // Create URL for needle_type_url if it exists
+    if (processed.needle_type_url && typeof processed.needle_type_url === 'string') {
+        processed.needle_type_url = `${mainConfig.api_url}/media/products/needle-type/Needle-type.pdf`;
+    }
+
+    // Create URL for complete_sheet if it exists
+    if (processed.complete_sheet && typeof processed.complete_sheet === 'string') {
+        processed.complete_sheet = `${mainConfig.api_url}/media/products/complete-sheet/${productSlug}.pdf`;
+    }
+
+    return processed;
   }
 }
