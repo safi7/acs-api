@@ -10,8 +10,8 @@ exports.FileUploadInterceptor = void 0;
 const common_1 = require("@nestjs/common");
 const sharp = require("sharp");
 const MAX_FILE_SIZE = 150 * 1024;
-const MAX_WIDTH = 2000;
-const MAX_HEIGHT = 2000;
+const MAX_WIDTH = 500;
+const MAX_HEIGHT = 500;
 let FileUploadInterceptor = class FileUploadInterceptor {
     async intercept(context, next) {
         const request = context.switchToHttp().getRequest();

@@ -6,6 +6,7 @@ export declare class ProductCategoryEntity extends BaseEntity {
     slug: string;
     description: string;
     imageUrl: string;
+    hasProducts: boolean;
     createdAt: Date;
     updatedAt: Date;
     products: ProductEntity[];

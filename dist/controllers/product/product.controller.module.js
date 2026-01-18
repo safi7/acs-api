@@ -12,12 +12,18 @@ const product_controller_1 = require("./product.controller");
 const category_service_module_1 = require("../../services/product/category.service.module");
 const product_service_module_1 = require("../../services/product/product.service.module");
 const product_specification_service_module_1 = require("../../services/product/product-specification.service.module");
+const auth_service_module_1 = require("../../services/auth/auth.service.module");
 let ProductControllerModule = class ProductControllerModule {
 };
 exports.ProductControllerModule = ProductControllerModule;
 exports.ProductControllerModule = ProductControllerModule = __decorate([
     (0, common_1.Module)({
-        imports: [category_service_module_1.ProductCategoryServiceModule, product_service_module_1.ProductServiceModule, product_specification_service_module_1.ProductSpecificationServiceModule],
+        imports: [
+            category_service_module_1.ProductCategoryServiceModule,
+            product_service_module_1.ProductServiceModule,
+            product_specification_service_module_1.ProductSpecificationServiceModule,
+            auth_service_module_1.AuthServiceModule
+        ],
         providers: [],
         controllers: [product_controller_1.ProductController]
     })

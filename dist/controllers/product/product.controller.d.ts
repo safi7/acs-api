@@ -1,4 +1,3 @@
-import { CategoryCreateDto, ProductCreateDto } from 'src/common/dto/category.dto';
 import { categoryResponseInterface } from 'src/common/interfaces/category.interface';
 import { ProductResponseInterface, ProductSpecificationInterface } from 'src/common/interfaces/product.interface';
 import { ProductCategoryService } from 'src/services/product/category.service';
@@ -10,11 +9,23 @@ export declare class ProductController {
     private productSpecificationS;
     constructor(productCategoryS: ProductCategoryService, productS: ProductService, productSpecificationS: ProductSpecificationService);
     getCategories(): Promise<categoryResponseInterface[]>;
-    createCategories(params: CategoryCreateDto): Promise<categoryResponseInterface>;
+    createCategories(req: any): Promise<categoryResponseInterface>;
     getProducts(): Promise<ProductResponseInterface[]>;
     getProduct(slug: string): Promise<ProductResponseInterface>;
-    createProduct(params: ProductCreateDto): Promise<ProductResponseInterface>;
+    createProduct(req: any): Promise<ProductResponseInterface>;
     getProductSpecifications(): Promise<ProductSpecificationInterface[]>;
     createProductSpecification(params: Partial<ProductSpecificationInterface>): Promise<ProductSpecificationInterface>;
+    deleteCategory(slug: string): Promise<{
+        status: string;
+        message: string;
+    }>;
+    deleteProduct(slug: string): Promise<{
+        status: string;
+        message: string;
+    }>;
+    deleteProductSpecification(id: string): Promise<{
+        status: string;
+        message: string;
+    }>;
     private processSpecifications;
 }

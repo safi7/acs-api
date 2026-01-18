@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 import * as sharp from 'sharp';
 
 const MAX_FILE_SIZE = 150 * 1024; // 150KB in bytes
-const MAX_WIDTH = 2000;
-const MAX_HEIGHT = 2000;
+const MAX_WIDTH = 500;
+const MAX_HEIGHT = 500;
 
 @Injectable()
 export class FileUploadInterceptor implements NestInterceptor {

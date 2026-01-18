@@ -14,11 +14,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductController = void 0;
 const common_1 = require("@nestjs/common");
-const category_dto_1 = require("../../common/dto/category.dto");
 const main_config_1 = require("../../configs/main.config");
 const category_service_1 = require("../../services/product/category.service");
 const product_service_1 = require("../../services/product/product.service");
 const product_specification_service_1 = require("../../services/product/product-specification.service");
+const auth_guard_1 = require("../../common/guards/auth.guard");
+const file_upload_interceptor_1 = require("../../common/interceptors/file-upload.interceptor");
 let ProductController = class ProductController {
     productCategoryS;
     productS;
@@ -31,29 +32,40 @@ let ProductController = class ProductController {
     async getCategories() {
         const version = 2;
         const categories = await this.productCategoryS.findAll();
-        const hasProducts = ['medical-devices'];
         return categories.map((v) => ({
             ...v,
-            hasProducts: hasProducts.includes(v.slug),
+            hasProducts: v.hasProducts,
             imageUrl: `${main_config_1.default.api_url}/${v.imageUrl}?v=${version}`
         }));
     }
-    async createCategories(params) {
+    async createCategories(req) {
         try {
-            const category = await this.productCategoryS.create(params);
-            const hasProducts = ['medical-devices'];
+            const fileData = req.fileData;
+            if (!fileData) {
+                throw new common_1.HttpException('Image file is required', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const title = req.body?.title;
+            const description = req.body?.description;
+            const slug = req.body?.slug;
+            if (!title || !description || !slug) {
+                throw new common_1.HttpException('Title, description, and slug are required', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const category = await this.productCategoryS.createWithFile(fileData.buffer, slug, title, description);
             return {
                 id: category.id,
                 title: category.title,
                 description: category.description,
                 slug: category.slug,
-                hasProducts: hasProducts.includes(category.slug),
-                imageUrl: category.imageUrl,
+                hasProducts: category.hasProducts,
+                imageUrl: `${main_config_1.default.api_url}/${category.imageUrl}`,
                 createdAt: category.createdAt
             };
         }
         catch (err) {
             console.error('err', err);
+            if (err instanceof common_1.HttpException) {
+                throw err;
+            }
             throw new common_1.HttpException('could_not_create_a_record', common_1.HttpStatus.BAD_GATEWAY);
         }
     }
@@ -93,10 +105,31 @@ let ProductController = class ProductController {
             updatedAt: product.updatedAt
         };
     }
-    async createProduct(params) {
+    async createProduct(req) {
         try {
-            const { imageUrl, ...productData } = params;
-            const product = await this.productS.create(productData);
+            const fileData = req.fileData;
+            if (!fileData) {
+                throw new common_1.HttpException('Image file is required', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const name = req.body?.name;
+            const slug = req.body?.slug;
+            const categorySlug = req.body?.categorySlug;
+            const shortDescription = req.body?.shortDescription;
+            const manufacturer = req.body?.manufacturer;
+            const certifications = req.body?.certifications;
+            const specifications = req.body?.specifications ? JSON.parse(req.body.specifications) : undefined;
+            if (!name || !slug || !categorySlug) {
+                throw new common_1.HttpException('Name, slug, and categorySlug are required', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const product = await this.productS.createWithFile(fileData.buffer, slug, {
+                name,
+                slug,
+                categorySlug,
+                shortDescription,
+                manufacturer,
+                certifications,
+                specifications
+            });
             return {
                 id: product.id,
                 name: product.name,
@@ -105,7 +138,7 @@ let ProductController = class ProductController {
                 manufacturer: product.manufacturer,
                 certifications: product.certifications,
                 categorySlug: product.categorySlug,
-                imageUrl: `${main_config_1.default.api_url}/media/products/${product.slug}.webp`,
+                imageUrl: `${main_config_1.default.api_url}/${product.imageUrl}`,
                 specifications: this.processSpecifications(product.specifications || {}, product.slug),
                 createdAt: product.createdAt,
                 updatedAt: product.updatedAt
@@ -113,6 +146,9 @@ let ProductController = class ProductController {
         }
         catch (err) {
             console.error('err', err);
+            if (err instanceof common_1.HttpException) {
+                throw err;
+            }
             throw new common_1.HttpException('could_not_create_a_record', common_1.HttpStatus.BAD_GATEWAY);
         }
     }
@@ -126,6 +162,48 @@ let ProductController = class ProductController {
         catch (err) {
             console.error('err', err);
             throw new common_1.HttpException(err.message || 'could_not_create_specification', common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
+    async deleteCategory(slug) {
+        try {
+            await this.productCategoryS.delete(slug);
+            return {
+                status: 'success',
+                message: 'Category deleted successfully'
+            };
+        }
+        catch (err) {
+            console.error('Delete category error:', err);
+            const errorMessage = err instanceof Error ? err.message : 'Could not delete category';
+            throw new common_1.HttpException(errorMessage, common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
+    async deleteProduct(slug) {
+        try {
+            await this.productS.delete(slug);
+            return {
+                status: 'success',
+                message: 'Product deleted successfully'
+            };
+        }
+        catch (err) {
+            console.error('Delete product error:', err);
+            const errorMessage = err instanceof Error ? err.message : 'Could not delete product';
+            throw new common_1.HttpException(errorMessage, common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
+    async deleteProductSpecification(id) {
+        try {
+            await this.productSpecificationS.delete(+id);
+            return {
+                status: 'success',
+                message: 'Specification deleted successfully'
+            };
+        }
+        catch (err) {
+            console.error('Delete specification error:', err);
+            const errorMessage = err instanceof Error ? err.message : 'Could not delete specification';
+            throw new common_1.HttpException(errorMessage, common_1.HttpStatus.BAD_REQUEST);
         }
     }
     processSpecifications(specifications, productSlug) {
@@ -151,9 +229,11 @@ __decorate([
 ], ProductController.prototype, "getCategories", null);
 __decorate([
     (0, common_1.Post)('category/create'),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseInterceptors)(file_upload_interceptor_1.FileUploadInterceptor),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [category_dto_1.CategoryCreateDto]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "createCategories", null);
 __decorate([
@@ -171,9 +251,11 @@ __decorate([
 ], ProductController.prototype, "getProduct", null);
 __decorate([
     (0, common_1.Post)('/create'),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseInterceptors)(file_upload_interceptor_1.FileUploadInterceptor),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [category_dto_1.ProductCreateDto]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "createProduct", null);
 __decorate([
@@ -189,6 +271,30 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "createProductSpecification", null);
+__decorate([
+    (0, common_1.Delete)('/category/:slug'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "deleteCategory", null);
+__decorate([
+    (0, common_1.Delete)('/:slug'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "deleteProduct", null);
+__decorate([
+    (0, common_1.Delete)('/specifications/:id'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "deleteProductSpecification", null);
 exports.ProductController = ProductController = __decorate([
     (0, common_1.Controller)('product'),
     __metadata("design:paramtypes", [category_service_1.ProductCategoryService,

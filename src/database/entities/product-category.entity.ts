@@ -18,6 +18,9 @@ export class ProductCategoryEntity extends BaseEntity {
   @Column()
   imageUrl: string;
 
+  @Column({ default: false })
+  hasProducts: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

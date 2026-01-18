@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProductSpecificationEntity } from 'src/database/entities';
+import { ProductSpecificationEntity, ProductEntity } from 'src/database/entities';
 import { FieldKeyUtil } from 'src/common/utils/field-key.util';
 
 @Injectable()
 export class ProductSpecificationService {
   constructor(
     @InjectRepository(ProductSpecificationEntity)
-    private repo: Repository<ProductSpecificationEntity>
+    private repo: Repository<ProductSpecificationEntity>,
+    @InjectRepository(ProductEntity)
+    private productRepo: Repository<ProductEntity>
   ) {}
 
   findAll() {
@@ -65,12 +67,33 @@ export class ProductSpecificationService {
     return this.findOne(id);
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<void> {
     const specification = await this.findOne(id);
     if (!specification) {
       throw new Error('Specification not found');
     }
 
-    return this.repo.remove(specification);
+    // Check if this specification is used by any product
+    const products = await this.productRepo.find();
+    const productsUsingSpec: string[] = [];
+
+    for (const product of products) {
+      if (product.specifications && typeof product.specifications === 'object') {
+        // Check if the specification key exists in the product's specifications
+        if (specification.key && specification.key in product.specifications) {
+          productsUsingSpec.push(product.name);
+        }
+      }
+    }
+
+    if (productsUsingSpec.length > 0) {
+      const productList = productsUsingSpec.slice(0, 5).join(', ');
+      const moreText = productsUsingSpec.length > 5 ? ` and ${productsUsingSpec.length - 5} more` : '';
+      throw new Error(
+        `Cannot delete specification '${specification.name}'. It is currently used by ${productsUsingSpec.length} product(s): ${productList}${moreText}. Please remove this specification from all products first.`
+      );
+    }
+
+    await this.repo.remove(specification);
   }
 }

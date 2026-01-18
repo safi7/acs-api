@@ -1,11 +1,12 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
-import { CategoryCreateDto, ProductCreateDto } from 'src/common/dto/category.dto';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Delete, UseGuards, UseInterceptors, Request } from '@nestjs/common';
 import { categoryResponseInterface } from 'src/common/interfaces/category.interface';
 import { ProductResponseInterface, ProductSpecificationInterface } from 'src/common/interfaces/product.interface';
 import mainConfig from 'src/configs/main.config';
 import { ProductCategoryService } from 'src/services/product/category.service';
 import { ProductService } from 'src/services/product/product.service';
 import { ProductSpecificationService } from 'src/services/product/product-specification.service';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { FileUploadInterceptor } from 'src/common/interceptors/file-upload.interceptor';
 
 @Controller('product')
 export class ProductController {
@@ -19,30 +20,53 @@ export class ProductController {
   async getCategories(): Promise<categoryResponseInterface[]> {
     const version = 2;
     const categories = await this.productCategoryS.findAll();
-    const hasProducts = ['medical-devices'];
     return categories.map((v) => ({
       ...v,
-      hasProducts: hasProducts.includes(v.slug),
+      hasProducts: v.hasProducts,
       imageUrl: `${mainConfig.api_url}/${v.imageUrl}?v=${version}`
     }));
   }
 
   @Post('category/create')
-  async createCategories(@Body() params: CategoryCreateDto): Promise<categoryResponseInterface> {
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileUploadInterceptor)
+  async createCategories(@Request() req: any): Promise<categoryResponseInterface> {
     try {
-      const category = await this.productCategoryS.create(params);
-    const hasProducts = ['medical-devices'];
+      const fileData = (req as any).fileData;
+      if (!fileData) {
+        throw new HttpException('Image file is required', HttpStatus.BAD_REQUEST);
+      }
+
+      // Get form fields from multipart data
+      const title = req.body?.title;
+      const description = req.body?.description;
+      const slug = req.body?.slug;
+
+      if (!title || !description || !slug) {
+        throw new HttpException('Title, description, and slug are required', HttpStatus.BAD_REQUEST);
+      }
+
+      const category = await this.productCategoryS.createWithFile(
+        fileData.buffer,
+        slug,
+        title,
+        description
+      );
+
       return {
         id: category.id,
         title: category.title,
         description: category.description,
         slug: category.slug,
-        hasProducts: hasProducts.includes(category.slug),
-        imageUrl: category.imageUrl,
+        hasProducts: category.hasProducts,
+        imageUrl: `${mainConfig.api_url}/${category.imageUrl}`,
         createdAt: category.createdAt
       };
     } catch (err) {
       console.error('err', err);
+      if (err instanceof HttpException) {
+        throw err;
+      }
       throw new HttpException('could_not_create_a_record', HttpStatus.BAD_GATEWAY);
     }
   }
@@ -89,11 +113,42 @@ export class ProductController {
   }
 
   @Post('/create')
-  async createProduct(@Body() params: ProductCreateDto): Promise<ProductResponseInterface> {
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileUploadInterceptor)
+  async createProduct(@Request() req: any): Promise<ProductResponseInterface> {
     try {
-      // Don't store imageUrl in database, generate it dynamically
-      const { imageUrl, ...productData } = params;
-      const product = await this.productS.create(productData);
+      const fileData = (req as any).fileData;
+      if (!fileData) {
+        throw new HttpException('Image file is required', HttpStatus.BAD_REQUEST);
+      }
+
+      // Get form fields from multipart data
+      const name = req.body?.name;
+      const slug = req.body?.slug;
+      const categorySlug = req.body?.categorySlug;
+      const shortDescription = req.body?.shortDescription;
+      const manufacturer = req.body?.manufacturer;
+      const certifications = req.body?.certifications;
+      const specifications = req.body?.specifications ? JSON.parse(req.body.specifications) : undefined;
+
+      if (!name || !slug || !categorySlug) {
+        throw new HttpException('Name, slug, and categorySlug are required', HttpStatus.BAD_REQUEST);
+      }
+
+      const product = await this.productS.createWithFile(
+        fileData.buffer,
+        slug,
+        {
+          name,
+          slug,
+          categorySlug,
+          shortDescription,
+          manufacturer,
+          certifications,
+          specifications
+        }
+      );
+
       return {
         id: product.id,
         name: product.name,
@@ -102,13 +157,16 @@ export class ProductController {
         manufacturer: product.manufacturer,
         certifications: product.certifications,
         categorySlug: product.categorySlug,
-        imageUrl: `${mainConfig.api_url}/media/products/${product.slug}.webp`,
+        imageUrl: `${mainConfig.api_url}/${product.imageUrl}`,
         specifications: this.processSpecifications(product.specifications || {}, product.slug),
         createdAt: product.createdAt,
         updatedAt: product.updatedAt
       };
     } catch (err) {
       console.error('err', err);
+      if (err instanceof HttpException) {
+        throw err;
+      }
       throw new HttpException('could_not_create_a_record', HttpStatus.BAD_GATEWAY);
     }
   }
@@ -125,6 +183,54 @@ export class ProductController {
     } catch (err) {
       console.error('err', err);
       throw new HttpException(err.message || 'could_not_create_specification', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Delete('/category/:slug')
+  @UseGuards(AuthGuard)
+  async deleteCategory(@Param('slug') slug: string): Promise<{ status: string; message: string }> {
+    try {
+      await this.productCategoryS.delete(slug);
+      return { 
+        status: 'success',
+        message: 'Category deleted successfully'
+      };
+    } catch (err) {
+      console.error('Delete category error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Could not delete category';
+      throw new HttpException(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Delete('/:slug')
+  @UseGuards(AuthGuard)
+  async deleteProduct(@Param('slug') slug: string): Promise<{ status: string; message: string }> {
+    try {
+      await this.productS.delete(slug);
+      return { 
+        status: 'success',
+        message: 'Product deleted successfully'
+      };
+    } catch (err) {
+      console.error('Delete product error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Could not delete product';
+      throw new HttpException(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Delete('/specifications/:id')
+  @UseGuards(AuthGuard)
+  async deleteProductSpecification(@Param('id') id: string): Promise<{ status: string; message: string }> {
+    try {
+      await this.productSpecificationS.delete(+id);
+      return { 
+        status: 'success',
+        message: 'Specification deleted successfully'
+      };
+    } catch (err) {
+      console.error('Delete specification error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Could not delete specification';
+      throw new HttpException(errorMessage, HttpStatus.BAD_REQUEST);
     }
   }
 

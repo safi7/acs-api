@@ -18,6 +18,7 @@ let ProductCategoryEntity = class ProductCategoryEntity extends typeorm_1.BaseEn
     slug;
     description;
     imageUrl;
+    hasProducts;
     createdAt;
     updatedAt;
     products;
@@ -43,6 +44,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], ProductCategoryEntity.prototype, "imageUrl", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], ProductCategoryEntity.prototype, "hasProducts", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
