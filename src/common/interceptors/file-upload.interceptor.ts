@@ -8,11 +8,8 @@ import {
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 import { Observable } from 'rxjs';
-import * as sharp from 'sharp';
 
 const MAX_FILE_SIZE = 150 * 1024; // 150KB in bytes
-const MAX_WIDTH = 500;
-const MAX_HEIGHT = 500;
 
 @Injectable()
 export class FileUploadInterceptor implements NestInterceptor {
@@ -47,7 +44,7 @@ export class FileUploadInterceptor implements NestInterceptor {
           throw new HttpException('File must be in WEBP format', HttpStatus.BAD_REQUEST);
         }
 
-        // Validate image dimensions using sharp
+        // Validate image dimensions using 
         try {
           // Ensure we have a proper Buffer instance
           const buffer = Buffer.isBuffer(fileBuffer) ? fileBuffer : Buffer.from(fileBuffer);
@@ -61,21 +58,8 @@ export class FileUploadInterceptor implements NestInterceptor {
           if (!header.startsWith('RIFF') || !header.includes('WEBP')) {
             throw new HttpException('Invalid WEBP file format - file header does not match WEBP signature', HttpStatus.BAD_REQUEST);
           }
-          
-          // Use sharp to read metadata - it should auto-detect WEBP format
-          const metadata = await sharp(buffer).metadata();
-          if (!metadata.width || !metadata.height) {
-            throw new HttpException('Invalid image file - could not read dimensions', HttpStatus.BAD_REQUEST);
-          }
-
-          if (metadata.width > MAX_WIDTH || metadata.height > MAX_HEIGHT) {
-            throw new HttpException(
-              `Image dimensions (${metadata.width}x${metadata.height}px) exceed maximum allowed size of ${MAX_WIDTH}x${MAX_HEIGHT}px`,
-              HttpStatus.BAD_REQUEST
-            );
-          }
         } catch (error: any) {
-          console.error('Sharp error details:', {
+          console.error('error details:', {
             message: error?.message,
             code: error?.code,
             errno: error?.errno,

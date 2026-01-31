@@ -1,14 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { sendEmailInterface } from 'src/common/interfaces/email.interface';
 import mainConfig from 'src/configs/main.config';
-import * as sgMail from '@sendgrid/mail';
 import  axios from 'axios';
 
 @Injectable()
 export class TelegramProvider {
 
   constructor() {
-    sgMail.setApiKey(`${mainConfig.sendgrid_api_key}`);
   }
 
   async sendMessage(message: string) {

@@ -14,7 +14,6 @@ export class ContactController {
     }
 
     try {
-      // await this.contactS.sendFeedback(params);
       await this.contactS.sendTelegramMessage(params);
     } catch (err) {
       console.log('err', err);

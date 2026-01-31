@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { writeFile, mkdir, unlink } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { v4 as uuidv4 } from 'uuid';
 import { GalleryEntity } from 'src/database/entities';
 
 @Injectable()
@@ -45,7 +44,7 @@ export class GalleryService {
   ): Promise<GalleryEntity> {
     // Generate unique filename
     const fileExtension = filename.split('.').pop() || 'webp';
-    const uniqueFilename = `${uuidv4()}.${fileExtension}`;
+    const uniqueFilename = `${new Date().getTime()}.${fileExtension}`;
     const filePath = join(this.galleryPath, uniqueFilename);
 
     // Save file to disk
