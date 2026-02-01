@@ -1,0 +1,58 @@
+# Git
+.git
+.gitignore
+
+# Dependencies (will be installed fresh)
+node_modules
+
+# Build artifacts (will be built fresh)
+dist
+*.tsbuildinfo
+
+# Tests
+coverage
+.nyc_output
+**/*.spec.ts
+**/*.test.ts
+test/
+
+# Development files
+.prettierrc
+.eslintrc.js
+eslint.config.*
+.vscode
+.idea
+*.sublime-*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Documentation
+README.md
+*.md
+docs/
+
+# Scripts (not needed in production)
+src/scripts/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Package manager files
+.npmrc
+.yarnrc
+yarn.lock
+pnpm-lock.yaml
