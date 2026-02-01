@@ -21,8 +21,13 @@ export class ProductCategoryService {
   }
 
   private async ensureCategoriesDirectory() {
-    if (!existsSync(this.categoriesPath)) {
-      await mkdir(this.categoriesPath, { recursive: true });
+    try {
+      if (!existsSync(this.categoriesPath)) {
+        await mkdir(this.categoriesPath, { recursive: true });
+      }
+    } catch (error) {
+      // Log but don't crash - directory might already exist or be created by Docker
+      console.warn(`Could not create categories directory: ${error.message}`);
     }
   }
 

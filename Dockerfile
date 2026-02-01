@@ -43,6 +43,10 @@ COPY media ./media
 # Set NODE_ENV to production
 ENV NODE_ENV=production
 
+# Create directories and set permissions BEFORE switching to node user
+RUN mkdir -p media/products/categories media/gallery \
+    && chown -R node:node /app
+
 # Use non-root user for security
 USER node
 

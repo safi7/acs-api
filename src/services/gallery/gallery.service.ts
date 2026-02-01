@@ -19,8 +19,12 @@ export class GalleryService {
   }
 
   private async ensureGalleryDirectory() {
-    if (!existsSync(this.galleryPath)) {
-      await mkdir(this.galleryPath, { recursive: true });
+    try {
+      if (!existsSync(this.galleryPath)) {
+        await mkdir(this.galleryPath, { recursive: true });
+      }
+    } catch (error) {
+      console.warn(`Could not create gallery directory: ${error.message}`);
     }
   }
 

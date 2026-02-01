@@ -21,8 +21,12 @@ export class ProductService {
   }
 
   private async ensureProductsDirectory() {
-    if (!existsSync(this.productsPath)) {
-      await mkdir(this.productsPath, { recursive: true });
+    try {
+      if (!existsSync(this.productsPath)) {
+        await mkdir(this.productsPath, { recursive: true });
+      }
+    } catch (error) {
+      console.warn(`Could not create products directory: ${error.message}`);
     }
   }
 
