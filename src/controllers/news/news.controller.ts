@@ -2,12 +2,15 @@ import { Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, U
 import { OptionalFileUploadInterceptor } from 'src/common/interceptors/optional-file-upload.interceptor';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { NewsResponseInterface } from 'src/common/interfaces/news.interface';
-import mainConfig from 'src/configs/main.config';
 import { NewsService } from 'src/services/news/news.service';
+import { StorageService } from 'src/services/storage/storage.service';
 
 @Controller('news')
 export class NewsController {
-  constructor(private newsS: NewsService) {}
+  constructor(
+    private newsS: NewsService,
+    private storage: StorageService
+  ) {}
 
   private toResponse(item: any): NewsResponseInterface {
     return {
@@ -17,7 +20,7 @@ export class NewsController {
       content: item.content,
       keywords: item.keywords,
       imagePath: item.imagePath,
-      imageUrl: item.imagePath ? `${mainConfig.api_url}/media/news/${item.imagePath}?v=1` : null,
+      imageUrl: item.imagePath ? this.storage.getPublicUrl('news', item.imagePath) : null,
       metaDescription: item.metaDescription,
       isPublished: item.isPublished,
       createdAt: item.createdAt,
@@ -67,14 +70,7 @@ export class NewsController {
         throw new HttpException('Title, content and keywords are required', HttpStatus.BAD_REQUEST);
       }
 
-      const item = await this.newsS.createWithFile(
-        title,
-        content,
-        keywords,
-        isPublished,
-        fileData?.buffer,
-        fileData?.filename
-      );
+      const item = await this.newsS.createWithFile(title, content, keywords, isPublished, fileData?.buffer, fileData?.filename);
       return this.toResponse(item);
     } catch (err) {
       if (err instanceof HttpException) throw err;

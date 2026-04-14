@@ -19,5 +19,9 @@ export default {
   target_email: process.env.TARGET_EMAIL,
 
   telegram_api_url: process.env.TELEGRAM_API_URL,
-  telegram_channel_id: process.env.TELEGRAM_CHANNEL_ID
+  telegram_channel_id: process.env.TELEGRAM_CHANNEL_ID,
+
+  supabase_url: process.env.SUPABASE_URL,
+  supabase_service_key: process.env.SUPABASE_SERVICE_KEY,
+  supabase_storage_bucket: process.env.SUPABASE_STORAGE_BUCKET || 'media',
 };
